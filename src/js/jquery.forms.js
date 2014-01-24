@@ -1,11 +1,36 @@
-(function($, kendo) {
-	var ui = kendo.ui,
-		Widget = ui.Widget,
-		typeUpgrades = kendo.forms.types,
-    features = kendo.forms.features,
+(function($) {
+	var typeUpgrades = $.forms.types,
+    features = $.forms.features,
     vanillaInputRegEx = /text|button|submit|reset/i;
 
-	var Form = Widget.extend({
+  $.widget('ui.Form', {
+
+    // default options
+    options: {
+      alwaysUseWidgets: false,
+      mobile: false,
+      styleInputs: true
+    },
+
+    _create: function() {},
+
+    _refresh: function() {},
+
+    _destroy: function() {},
+
+    _setOptions: function() {
+      this._superApply( arguments );
+      this._refresh();
+    },
+
+    _setOption: function(key, value) {
+      this._super(key, value);
+    }
+
+  });
+
+
+	/*var Form = Widget.extend({
 		init: function(element, options) {
 			var that = this;
 			Widget.fn.init.call(this, element, options);
@@ -90,15 +115,5 @@
       el.wrap('<label class="placeholder">' + placeholderText + '</label>');
       el.addClass('placeholder');
     },
-		options: {
-			// the name is what it will appear in the kendo namespace (kendo.ui.Form).
-			// The jQuery plugin would be jQuery.fn.kendoForm.
-			name: 'Form',
-			alwaysUseWidgets: false,
-      mobile: false,
-			styleInputs: true
-		}
-	});
-
-	ui.plugin(Form);
-} (jQuery, kendo));
+	});*/
+} (jQuery));

@@ -39,6 +39,34 @@ grunt
 
 to make sure everything is working. If you see text indicating that the jshint, concat and uglify tasks have run without errors, you're golden!
 
+== UI Element Support
+
+The table below contains a list of HTML5 Form elements available in jQuery UI, and which can be used to polyfill inputs.
+
+.Current Status of Polyfill Features
+[grid="rows"]
+[options="header",width="50%"]
+|==================================
+|Feature         |jQuery UI Equivalent?
+|Color           |No
+|Number          |Yes
+|Range           |Yes
+|File            |Yes
+|DateTime        |No
+|DateTime-Local  |No
+|Time            |No
+|Month           |Yes
+|Week            |Yes
+|Date            |Yes
+|Buttons         |Yes
+|Progress        |Yes
+|Meter           |Yes
+|Datalist        |Yes
+|Search          |No
+|Autocomplete    |Yes
+|Validation      |Yes
+|==================================
+
 == Running the Tests
 
 Tests are written in http://pivotal.github.io/jasmine/[jasmine] and can be found in the spec/ directory. To run the tests from the command-line, call

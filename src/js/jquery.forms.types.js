@@ -1,5 +1,5 @@
-(function (kendo) {
-	kendo.forms = kendo.forms || {};
+(function ($) {
+  $.forms = $.forms || {};
 
 	var typeUpgrades = {
     text: upgradeInputs,
@@ -174,5 +174,5 @@
     $(val).addClass('k-input k-textbox');
   }
 
-	kendo.forms.types = typeUpgrades;
-} (kendo));
+  $.forms.types = typeUpgrades;
+} (jQuery));

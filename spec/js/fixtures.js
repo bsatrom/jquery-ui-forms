@@ -1,4 +1,4 @@
-describe('Kendo Forms Widget Test Suite', function() {
+describe('jQuery UI Forms Widget Test Suite', function() {
   describe('Form initialization tests', function() {
 		var fixtures = jasmine.getFixtures(),
 			env = 'headless';
@@ -14,79 +14,13 @@ describe('Kendo Forms Widget Test Suite', function() {
 		}
 
 		describe('Form Widget initialization', function() {
-			it('should exist in the kendo.ui namespace', function() {
-				expect(kendo.ui.Form).toBeDefined();
+			it('should exist in the $ namespace', function() {
+				expect($.ui.Form).toBeDefined();
 			});
 
 			it('should be able to perform imperative initialization with JavaScript',
 				function() {
-				expect($('#imperative-form').kendoForm).toBeDefined();
-			});
-
-			it('should be able to perform declarative initialization with data' +
-				' attributes', function() {
-				fixtures.load('declarative-form.html');
-
-				kendo.init(document.body);
-
-				expect($('#declarative-form').data('kendoForm')).not.toBe(null);
-			});
-		});
-
-		describe('Input transformation', function() {
-			it('should add the k-input class to all inputs inside of the form',
-				function() {
-				fixtures.load('input-transformation.html');
-
-				$('#imperative-form').kendoForm();
-				expect($('#imperative-form').find('#vanillaInput')
-					.hasClass('k-input')).toBe(true);
-			});
-
-			it('should add the k-input class to inputs inside of the form' +
-				' if the styleInputs option is true', function() {
-				fixtures.load('input-transformation.html');
-
-				$('#imperative-form').kendoForm({ styleInputs: true });
-				expect($('#imperative-form').find('#vanillaInput')
-					.hasClass('k-input')).toBe(true);
-			});
-
-			it('should NOT add the k-input class to inputs inside of the' +
-				' form if the styleInputs option is false', function() {
-				fixtures.load('input-transformation.html');
-
-				$('#imperative-form').kendoForm({ styleInputs: false });
-				expect($('#imperative-form').find('#vanillaInput')
-					.hasClass('k-input')).toBe(false);
-			});
-
-			it('should NOT add the k-input class to button inputs', function() {
-				fixtures.load('input-transformation.html');
-
-				$('#imperative-form').kendoForm();
-				expect($('#imperative-form').find('#submit')
-					.hasClass('k-input')).toBe(false);
-				expect($('#imperative-form').find('#button')
-					.hasClass('k-input')).toBe(false);
-				expect($('#imperative-form').find('#reset')
-					.hasClass('k-input')).toBe(false);
-				expect($('#imperative-form').find('#button')
-					.hasClass('k-input')).toBe(false);
-			});
-
-			it('should add the k-button class to button inputs', function() {
-				fixtures.load('input-transformation.html');
-
-				$('#imperative-form').kendoForm();
-				expect($('#imperative-form').find('#submit')
-					.hasClass('k-button')).toBe(true);
-				expect($('#imperative-form').find('#button')
-					.hasClass('k-button')).toBe(true);
-				expect($('#imperative-form').find('#reset')
-					.hasClass('k-button')).toBe(true);
-				expect($('#imperative-form').find('#buttonEl')
-					.hasClass('k-button')).toBe(true);
+				expect($('#imperative-form').Form).toBeDefined();
 			});
 		});
 

@@ -1,5 +1,5 @@
-(function (kendo) {
-	kendo.forms = kendo.forms || {};
+(function ($) {
+  $.forms = $.forms || {};
 
 	function detectFormTypeSupport(type) {
 		var input = document.createElement('input');
@@ -45,5 +45,5 @@
 		}())
 	};
 
-	kendo.forms.features = featureDetects;
-} (kendo));
+  $.forms.features = featureDetects;
+} (jQuery));
