@@ -51,7 +51,7 @@ The table below contains a list of HTML5 Form elements available in jQuery UI, a
 |Color           |No
 |Number          |Yes
 |Range           |Yes
-|File            |Yes
+|File            |No
 |DateTime        |No
 |DateTime-Local  |No
 |Time            |No

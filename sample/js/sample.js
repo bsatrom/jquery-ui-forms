@@ -1,9 +1,9 @@
-(function($, kendo) {
+(function($) {
 	$("#activatePolyfill").on("click", function() {
-    $("#sampleForm").kendoForm();
+    $("#sampleForm").Form();
   });
   
   $("#useWidgets").on("click", function() {
-    $("#sampleForm").kendoForm({ alwaysUseWidgets: true });
+    $("#sampleForm").Form({ alwaysUseWidgets: true });
   });
-}(jQuery, kendo));
+}(jQuery));

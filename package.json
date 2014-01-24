@@ -1,6 +1,6 @@
 {
   "name": "jquery-ui-forms",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A cross-browser polyfill for HTML5 forms features",
   "repository": {
     "type": "git",

@@ -2,43 +2,19 @@
   $.forms = $.forms || {};
 
 	var typeUpgrades = {
-    text: upgradeInputs,
-    email: upgradeInputs,
-    tel: upgradeInputs,
-    search: upgradeInputs,
     button: upgradeButton,
     submit: upgradeButton,
     reset: upgradeButton,
-    color: function(val) {
-      $(val).kendoColorPicker({ palette: 'basic' });
-    },
     number: function(val) {
-      $(val).kendoNumericTextBox();
+      $(val).spinner();
     },
     range: function(val) {
-      $(val).kendoSlider({
-        showButtons: false,
-        tickPlacement: 'none'
-      });
-    },
-    file: function(val) {
-      $(val).kendoUpload();
-    },
-    datetime: dateTimeUpgrade,
-    'datetime-local': dateTimeUpgrade,
-    time: function(val) {
-      var input = $(val),
-        dummyDate = '2013-10-04T';
-
-      input.kendoTimePicker({
-        value: createDateFromInput(input.val(), null, dummyDate),
-        min: createDateFromInput(input.attr('min'),
-          new Date(2049, 0, 1, 0, 0, 0), dummyDate),
-        max: createDateFromInput(input.attr('max'),
-          new Date(2099, 11, 31, 0, 0, 0), dummyDate),
-        // Step attribute is seconds, interval in minute
-        interval: input.attr('step') ?
-          Math.round(parseInt(input.attr('step'), 10)/60) : 30
+      var input = $(val);
+      input.slider({
+        value: input.val(),
+        min: input.attr('min'),
+        max: input.attr('max'),
+        step: input.attr('step')
       });
     },
     month: function(val) {
@@ -47,15 +23,14 @@
         min = convertMonthPartToDate(input.attr('min')),
         max = convertMonthPartToDate(input.attr('max'));
 
-      input.kendoDatePicker({
-        // Set the start and depth properties to year, which means
-        // that only month values are displayed.
-        start: 'year',
-        depth: 'year',
+      input.datepicker({
         // If the conversion returned a NaN, use the default values
-        value: isNaN(value) ? null : new Date(value),
-        min: isNaN(min) ? new Date(1900, 0, 1) : new Date(min),
-        max: isNaN(max) ? new Date(2099, 11, 31) : new Date(max)
+        defaultDate: isNaN(value) ? null : new Date(value),
+        minDate: isNaN(min) ? new Date(1900, 0, 1) : new Date(min),
+        maxDate: isNaN(max) ? new Date(2099, 11, 31) : new Date(max),
+
+        changeMonth: true,
+        changeYear: true
       });
     },
     week: function(val) {
@@ -64,24 +39,23 @@
         min = getDateFromWeekString(input.attr('min')),
         max = getDateFromWeekString(input.attr('max'));
 
-      input.kendoDatePicker({
-        // Set the start and depth properties to month, which means
-        // that only day/week values are displayed.
-        depth: 'month',
-        // If the conversion returned a null date, use the default values
-        value: value,
-        min: min === null ? new Date(1900, 0, 1) : min,
-        max: max === null ? new Date(2099, 11, 31) : max
+      input.datepicker({
+        defaultDate: value,
+        minDate: min === null ? new Date(1900, 0, 1) : min,
+        maxDate: max === null ? new Date(2099, 11, 31) : max,
+
+        showWeek: true,
+        firstDay: 1
       });
     },
     date: function(val) {
       var input = $(val);
       var defaults = getDateTimeDefaults(input);
-      input.kendoDatePicker(defaults);
+      input.datepicker(defaults);
     },
     progress: function(val) {
       var input = $(val);
-      input.kendoProgressBar();
+      input.progressbar();
     }
   };
 
@@ -123,21 +97,11 @@
     return new Date(year, 0, day);
 	}
 
-	function dateTimeUpgrade(val) {
-		var input = $(val);
-
-		// Step attribute is seconds, interval in minute
-		var defaults = getDateTimeDefaults(input);
-		defaults.interval = input.attr('step') ?
-			Math.round(parseInt(input.attr('step'), 10)/60) : 30;
-		input.kendoDateTimePicker(defaults);
-	}
-
 	function getDateTimeDefaults(input) {
 		return {
-			value: createDateFromInput(input.val(), null),
-			min: createDateFromInput(input.attr('min'), new Date(1900, 0, 1)),
-			max: createDateFromInput(input.attr('max'), new Date(2099, 11, 31))
+			defaultDate: createDateFromInput(input.val(), null),
+			minDate: createDateFromInput(input.attr('min'), new Date(1900, 0, 1)),
+			maxDate: createDateFromInput(input.attr('max'), new Date(2099, 11, 31))
 		};
 	}
 
@@ -167,11 +131,7 @@
   }
 
   function upgradeButton(val) {
-    $(val).kendoButton();
-  }
-
-  function upgradeInputs(val) {
-    $(val).addClass('k-input k-textbox');
+    $(val).button();
   }
 
   $.forms.types = typeUpgrades;

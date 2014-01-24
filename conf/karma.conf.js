@@ -6,8 +6,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'lib/js/*.js',
-      'dist/js/kendo.forms.min.js',
-      {pattern: 'lib/js/jquery.min.js', watched: false, served: true,
+      'dist/js/jquery.forms.min.js',
+      {pattern: 'lib/js/jquery-1.10.2.js', watched: false, served: true,
        included: true},
       {pattern: 'spec/lib/jasmine-jquery.js', watched: false, served: true,
        included: true},

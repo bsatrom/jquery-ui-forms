@@ -32,8 +32,8 @@
       }
     };
   }
-}());;(function (kendo) {
-	kendo.forms = kendo.forms || {};
+}());;(function ($) {
+  $.forms = $.forms || {};
 
 	function detectFormTypeSupport(type) {
 		var input = document.createElement('input');
@@ -49,24 +49,9 @@
 		return input.type !== 'text';
 	}
 
-	function detectDateTimeFields(type) {
-		var dummyVal = ':(';
-
-		var i = document.createElement('input');
-		i.setAttribute('type', type);
-		// Credit to Mike Taylor //gist.github.com/miketaylr/310734
-		i.value = dummyVal;
-		return (i.value !== dummyVal);
-	}
-
 	var featureDetects = {
-		color: detectFormTypeSupport('color'),
 		number: detectFormTypeSupport('number'),
 		range: detectFormTypeSupport('range'),
-		file: detectFormTypeSupport('file'),
-		datetime: detectDateTimeFields('datetime'),
-		'datetime-local': detectFormTypeSupport('datetime-local'),
-		time: detectFormTypeSupport('time'),
 		month: detectFormTypeSupport('month'),
 		week: detectFormTypeSupport('week'),
 		date: detectFormTypeSupport('date'),
@@ -79,48 +64,24 @@
 		}())
 	};
 
-	kendo.forms.features = featureDetects;
-} (kendo));;(function (kendo) {
-	kendo.forms = kendo.forms || {};
+  $.forms.features = featureDetects;
+} (jQuery));;(function ($) {
+  $.forms = $.forms || {};
 
 	var typeUpgrades = {
-    text: upgradeInputs,
-    email: upgradeInputs,
-    tel: upgradeInputs,
-    search: upgradeInputs,
     button: upgradeButton,
     submit: upgradeButton,
     reset: upgradeButton,
-    color: function(val) {
-      $(val).kendoColorPicker({ palette: 'basic' });
-    },
     number: function(val) {
-      $(val).kendoNumericTextBox();
+      $(val).spinner();
     },
     range: function(val) {
-      $(val).kendoSlider({
-        showButtons: false,
-        tickPlacement: 'none'
-      });
-    },
-    file: function(val) {
-      $(val).kendoUpload();
-    },
-    datetime: dateTimeUpgrade,
-    'datetime-local': dateTimeUpgrade,
-    time: function(val) {
-      var input = $(val),
-        dummyDate = '2013-10-04T';
-
-      input.kendoTimePicker({
-        value: createDateFromInput(input.val(), null, dummyDate),
-        min: createDateFromInput(input.attr('min'),
-          new Date(2049, 0, 1, 0, 0, 0), dummyDate),
-        max: createDateFromInput(input.attr('max'),
-          new Date(2099, 11, 31, 0, 0, 0), dummyDate),
-        // Step attribute is seconds, interval in minute
-        interval: input.attr('step') ?
-          Math.round(parseInt(input.attr('step'), 10)/60) : 30
+      var input = $(val);
+      input.slider({
+        value: input.val(),
+        min: input.attr('min'),
+        max: input.attr('max'),
+        step: input.attr('step')
       });
     },
     month: function(val) {
@@ -129,15 +90,14 @@
         min = convertMonthPartToDate(input.attr('min')),
         max = convertMonthPartToDate(input.attr('max'));
 
-      input.kendoDatePicker({
-        // Set the start and depth properties to year, which means
-        // that only month values are displayed.
-        start: 'year',
-        depth: 'year',
+      input.datepicker({
         // If the conversion returned a NaN, use the default values
-        value: isNaN(value) ? null : new Date(value),
-        min: isNaN(min) ? new Date(1900, 0, 1) : new Date(min),
-        max: isNaN(max) ? new Date(2099, 11, 31) : new Date(max)
+        defaultDate: isNaN(value) ? null : new Date(value),
+        minDate: isNaN(min) ? new Date(1900, 0, 1) : new Date(min),
+        maxDate: isNaN(max) ? new Date(2099, 11, 31) : new Date(max),
+
+        changeMonth: true,
+        changeYear: true
       });
     },
     week: function(val) {
@@ -146,24 +106,23 @@
         min = getDateFromWeekString(input.attr('min')),
         max = getDateFromWeekString(input.attr('max'));
 
-      input.kendoDatePicker({
-        // Set the start and depth properties to month, which means
-        // that only day/week values are displayed.
-        depth: 'month',
-        // If the conversion returned a null date, use the default values
-        value: value,
-        min: min === null ? new Date(1900, 0, 1) : min,
-        max: max === null ? new Date(2099, 11, 31) : max
+      input.datepicker({
+        defaultDate: value,
+        minDate: min === null ? new Date(1900, 0, 1) : min,
+        maxDate: max === null ? new Date(2099, 11, 31) : max,
+
+        showWeek: true,
+        firstDay: 1
       });
     },
     date: function(val) {
       var input = $(val);
       var defaults = getDateTimeDefaults(input);
-      input.kendoDatePicker(defaults);
+      input.datepicker(defaults);
     },
     progress: function(val) {
       var input = $(val);
-      input.kendoProgressBar();
+      input.progressbar();
     }
   };
 
@@ -205,21 +164,11 @@
     return new Date(year, 0, day);
 	}
 
-	function dateTimeUpgrade(val) {
-		var input = $(val);
-
-		// Step attribute is seconds, interval in minute
-		var defaults = getDateTimeDefaults(input);
-		defaults.interval = input.attr('step') ?
-			Math.round(parseInt(input.attr('step'), 10)/60) : 30;
-		input.kendoDateTimePicker(defaults);
-	}
-
 	function getDateTimeDefaults(input) {
 		return {
-			value: createDateFromInput(input.val(), null),
-			min: createDateFromInput(input.attr('min'), new Date(1900, 0, 1)),
-			max: createDateFromInput(input.attr('max'), new Date(2099, 11, 31))
+			defaultDate: createDateFromInput(input.val(), null),
+			minDate: createDateFromInput(input.attr('min'), new Date(1900, 0, 1)),
+			maxDate: createDateFromInput(input.attr('max'), new Date(2099, 11, 31))
 		};
 	}
 
@@ -249,68 +198,59 @@
   }
 
   function upgradeButton(val) {
-    $(val).kendoButton();
+    $(val).button();
   }
 
-  function upgradeInputs(val) {
-    $(val).addClass('k-input k-textbox');
-  }
+  $.forms.types = typeUpgrades;
+} (jQuery));;(function($) {
+	var typeUpgrades = $.forms.types,
+    features = $.forms.features,
+    vanillaInputRegEx = /button|submit|reset/i;
 
-	kendo.forms.types = typeUpgrades;
-} (kendo));;(function($, kendo) {
-	var ui = kendo.ui,
-		Widget = ui.Widget,
-		typeUpgrades = kendo.forms.types,
-    features = kendo.forms.features,
-    vanillaInputRegEx = /text|button|submit|reset/i;
+  $.widget('ui.Form', {
 
-	var Form = Widget.extend({
-		init: function(element, options) {
-			var that = this;
-			Widget.fn.init.call(this, element, options);
+    // default options
+    options: {
+      alwaysUseWidgets: false,
+      mobile: false,
+      styleInputs: true
+    },
 
-      that.processInputElements(element);
-      that.processProgressElements(element);
-		},
-    processInputElements: function(form) {
+    _create: function() {
+      var that = this;
+
+      that._processInputElements(that.element);
+      that._processProgressElements(that.element);
+    },
+
+    _refresh: function() {},
+
+    _destroy: function() {},
+
+    _setOptions: function() {
+      this._superApply( arguments );
+      this._refresh();
+    },
+
+    _setOption: function(key, value) {
+      this._super(key, value);
+    },
+
+    _processInputElements: function(form) {
       var that = this;
       var inputs = $(form).find('input, button');
 
       inputs.each(function(index, el) {
-        that.upgradeInputType(that, el);
+        that._upgradeInputType(that, el);
 
         if (el.getAttribute('placeholder') &&
-          !kendo.forms.features.placeholder) {
-          that.upgradePlaceholder(el);
+          !features.placeholder) {
+          that._upgradePlaceholder(el);
         }
       });
     },
-    processProgressElements: function(form) {
-      var that = this;
-      var progress = $(form).find('progress');
 
-      progress.each(function(index, el) {
-        if(that.options.alwaysUseWidgets || !kendo.forms.features.progress) {
-          typeUpgrades.progress(el);
-        }
-      });
-    },
-    shouldUpgradeType: function(type) {
-      var that = this;
-      var inputSupported = features[type];
-
-      // don't upgrade mobile inputs if they are supported
-      // and the user has requested they always be used
-      if (that.options.mobile && kendo.support.mobileOS && inputSupported) {
-        return false;
-      }
-      
-      return (that.options.alwaysUseWidgets ||
-             !inputSupported) &&
-             type in typeUpgrades && !vanillaInputRegEx.test(type);
-             
-    },
-    upgradeInputType: function(that, el) {
+    _upgradeInputType: function(that, el) {
       var type = el.getAttribute('type');
 
       if (!type && el.nodeName === 'BUTTON') {
@@ -321,12 +261,33 @@
         typeUpgrades[type](el);
       }
 
-      if (that.shouldUpgradeType(type)) {
+      if (that._shouldUpgradeType(type)) {
         typeUpgrades[type](el);
       }
+    },
+
+    _shouldUpgradeType: function(type) {
+      var that = this;
+      var inputSupported = features[type];
+
+      return (that.options.alwaysUseWidgets ||
+        !inputSupported) &&
+        type in typeUpgrades && !vanillaInputRegEx.test(type);
 
     },
-    upgradePlaceholder: function(el) {
+
+    _processProgressElements: function(form) {
+      var that = this;
+      var progress = $(form).find('progress');
+
+      progress.each(function(index, el) {
+        if(that.options.alwaysUseWidgets || !features.progress) {
+          typeUpgrades.progress(el);
+        }
+      });
+    },
+
+    _upgradePlaceholder: function(el) {
       el = $(el);
       // Strip CR and LF from attribute vales, as specified in
       // www.w3.org/TR/html5/forms.html#the-placeholder-attribute
@@ -348,16 +309,6 @@
       });
       el.wrap('<label class="placeholder">' + placeholderText + '</label>');
       el.addClass('placeholder');
-    },
-		options: {
-			// the name is what it will appear in the kendo namespace (kendo.ui.Form).
-			// The jQuery plugin would be jQuery.fn.kendoForm.
-			name: 'Form',
-			alwaysUseWidgets: false,
-      mobile: false,
-			styleInputs: true
-		}
-	});
-
-	ui.plugin(Form);
-} (jQuery, kendo));
+    }
+  });
+} (jQuery));
