@@ -1,4 +1,5 @@
 lib-cov
+node_modules
 *.seed
 *.log
 *.csv
@@ -6,10 +7,13 @@ lib-cov
 *.out
 *.pid
 *.gz
+.DS_Store
+.grunt/
+_SpecRunner.html
+.idea/
 
 pids
 logs
 results
 
 npm-debug.log
-node_modules
