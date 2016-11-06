@@ -69,7 +69,7 @@ The table below contains a list of HTML5 Form elements available in jQuery UI, a
 
 == Running the Tests
 
-Tests are written in http://pivotal.github.io/jasmine/[jasmine] and can be found in the spec/ directory. To run the tests from the command-line, call
+Tests are written in https://jasmine.github.io/[jasmine] and can be found in the spec/ directory. To run the tests from the command-line, call
 
 [source]
 ----
